@@ -1,0 +1,266 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #4f46e5, #3b82f6);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    overflow-x: hidden;
+}
+
+header {
+    display: flex;
+}
+
+nav#sidebar {
+    background-color: white;
+    width: 220px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    transition: transform 0.5s ease;
+    z-index: 1000;
+}
+
+nav#sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+#logo {
+    width: 150px;
+    margin-bottom: 40px;
+    border-radius: 12px;
+}
+
+nav ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+    width: 100%;
+    padding: 0;
+    align-items: center;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
+    transition: all 0.2s ease;
+    padding: 10px 20px;
+    border-radius: 8px;
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    background-color: #4f46e5;
+    color: white;
+}
+
+#burger {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1100;
+    background-color: #4f46e5;
+    border: 2px solid rgba(0, 0, 0, 0.267);
+    color: white;
+    font-size: 28px;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+main {
+    padding: 40px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    width: 100%;
+}
+
+.welcome-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+#welcomeMessage {
+    color: white;
+    font-size: 2rem;
+}
+
+.addPostBtn {
+    background-color: white;
+    color: #4f46e5;
+    padding: 10px 20px;
+    font-size: 1rem;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.addPostBtn:hover {
+    background-color: #e0e7ff;
+}
+
+#mainContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+#activity {
+    color: white;
+    font-size: 2em;
+}
+
+article {
+    background-color: white;
+    padding: 25px 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+article:hover {
+    transform: translateY(-5px);
+}
+
+.mainDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: flex-start;
+}
+
+.subDiv1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+.postImgs {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #4f46e5;
+}
+
+.authors {
+    font-weight: bold;
+    color: #4f46e5;
+    font-size: 1.1rem;
+}
+
+.subDiv2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    column-gap: 30px;
+    width: 100%;
+}
+
+.titles {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.dates {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.postBody {
+    line-height: 1.7;
+    color: #1f2937;
+    font-size: 1.05rem;
+    white-space: pre-line;
+    padding-top: 5px;
+}
+
+form {
+    display: flex;
+    justify-content: right;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+form button {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+form button:hover {
+    background-color: #3b3ac1;
+}
+
+.noPosts {
+    color: white;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 1270px) {
+    #burger {
+        display: block;
+    }
+
+    nav#sidebar {
+        transform: translateX(-100%);
+    }
+
+    nav#sidebar.show {
+        transform: translateX(0);
+    }
+
+    main {
+        margin-left: 0;
+        padding: 20px;
+    }
+
+    .welcome-container,
+    #mainContainer {
+        align-items: center;
+    }
+}
