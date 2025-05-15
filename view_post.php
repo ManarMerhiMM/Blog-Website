@@ -10,7 +10,7 @@ if (!$postID) {
 
 // Fetch post, author info, and author_id
 $stmt = $conn->prepare(
-    "SELECT p.id, p.title, p.content, p.created_at AS post_created, p.author_id,
+    "SELECT p.id, p.category, p.title, p.content, p.created_at AS post_created, p.author_id,
             u.username, u.created_at AS user_created
      FROM posts p
      JOIN users u ON p.author_id = u.id
@@ -57,6 +57,7 @@ $postCount = $countRow['post_count'];
                 </span>
                 <span class="postCount"><?= $postCount ?> posts</span>
                 <span class="postDate">Published: <?= date("j F, Y", strtotime($post['post_created'])) ?></span>
+                <span class="categories"><?= $post["category"] ?></span>
             </div>
             <div class="postContent"><?= nl2br(htmlspecialchars($post['content'])) ?></div>
             <a href="index.php" class="backBtn">← Back to Home</a>
