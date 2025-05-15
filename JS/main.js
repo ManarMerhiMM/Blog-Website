@@ -11,12 +11,14 @@ burger.addEventListener("click", () => {
     }
 });
 
-document.getElementById("signoutBtn").addEventListener("click", (event) => {
-    if (!confirm("Are you sure you want to sign out?")) {
-        event.preventDefault();
-    }
-});
+if (document.getElementById("signoutBtn")) {
+    document.getElementById("signoutBtn").addEventListener("click", (event) => {
+        if (!confirm("Are you sure you want to sign out?")) {
+            event.preventDefault();
+        }
+    });
+}
 
-document.querySelectorAll("article").forEach(article => article.addEventListener("click", (event)=>{
+document.querySelectorAll("article").forEach(article => article.addEventListener("click", (event) => {
     article.querySelector("form").submit();
 }));

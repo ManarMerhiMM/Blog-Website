@@ -14,6 +14,18 @@ if (!$postID) {
     exit;
 }
 
+
+$authStmt = $conn->prepare("SELECT author_id FROM posts WHERE id = ?");
+$authStmt->bind_param("i", $postID);
+$authStmt->execute();
+$authResult = $authStmt->get_result();
+
+$authResult = $authResult->fetch_assoc();
+if($authResult["author_id"] != $_SESSION["id"]){
+    header("Location: dashboard.php");
+    exit;
+}
+
 // Fetch existing post data
 $stmt = $conn->prepare("SELECT title, content FROM posts WHERE id = ? AND author_id = ?");
 $stmt->bind_param("ii", $postID, $_SESSION['id']);
@@ -27,8 +39,8 @@ if ($result->num_rows !== 1) {
 $post = $result->fetch_assoc();
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $title = trim($_POST["title"]);
-    $content = trim($_POST["content"]);
+    $title = htmlspecialchars(trim($_POST["title"]));
+    $content = htmlspecialchars(trim($_POST["content"]));
 
     $upd = $conn->prepare(
         "UPDATE posts SET title = ?, content = ? WHERE id = ? AND author_id = ?"
@@ -52,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <form action="edit_post.php" method="post" id="updateForm">
+        <h2 id="formTitle">Edit Post</h2>
         <p id="errors"></p>
         <input type="hidden" name="postID" value="<?= $postID ?>">
         <input type="text" name="title" id="title" value="<?= htmlspecialchars($post['title']) ?>" placeholder="Title...">

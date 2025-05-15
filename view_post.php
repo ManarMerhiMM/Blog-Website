@@ -2,11 +2,6 @@
 session_start();
 include "connect.php";
 
-if (empty($_SESSION["successful"])) {
-    header("Location: session.php");
-    exit;
-}
-
 $postID = isset($_GET['postID']) ? intval($_GET['postID']) : 0;
 if (!$postID) {
     header("Location: index.php");

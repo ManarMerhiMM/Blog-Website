@@ -18,6 +18,16 @@ if (!$postID || !$user_id) {
     exit;
 }
 
+$authStmt = $conn->prepare("SELECT author_id FROM posts WHERE id = ?");
+$authStmt->bind_param("i", $postID);
+$authStmt->execute();
+$authResult = $authStmt->get_result();
+
+$authResult = $authResult->fetch_assoc();
+if($authResult["author_id"] != $_SESSION["id"]){
+    header("Location: dashboard.php");
+    exit;
+}
 //Handle the deletion on POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['confirm_delete'])) {

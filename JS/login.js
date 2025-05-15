@@ -22,16 +22,12 @@ showpass.addEventListener("click", () => {
 if (errorMessage.textContent != "") {
     errorMessage.style.display = "block";
 }
-setTimeout(() => {
-    errorMessage.style.display = "none";
-}, 3000);
 
 //form validation: user must enter something in both fields
 loginForm.addEventListener("submit", (event) => {
     if (usernameInput.value.trim() == "" || passwordInput.value.trim() == "") {
         errorMessage.style.display = "block";
         errorMessage.textContent = "Error: Empty field(s)!";
-        setTimeout(() => { errorMessage.style.display = "none"; }, 3000);
         event.preventDefault();
     }
 });

@@ -15,7 +15,7 @@ $userResult = $userStmt->get_result();
 $user = $userResult->fetch_assoc();
 
 $user_id = $user['id'];
-$stmt = $conn->prepare("SELECT * FROM posts WHERE author_id = ?");
+$stmt = $conn->prepare("SELECT * FROM posts WHERE author_id = ? ORDER BY created_at DESC");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();

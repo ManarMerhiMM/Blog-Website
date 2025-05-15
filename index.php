@@ -1,13 +1,6 @@
 <?php
 session_start(); // Start session at the beginning of the script
 include "connect.php";
-$_SESSION["prev_page"] = "index.php";
-
-// Redirect to session.php if the user is not successfully authenticated
-if (!(isset($_SESSION["successful"]) && $_SESSION["successful"])) {
-    header("Location: session.php");
-    exit;
-}
 
 $stmt = $conn->prepare("SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id ORDER BY posts.created_at DESC");
 $stmt->execute();
@@ -15,7 +8,7 @@ $result = $stmt->get_result();
 
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
     if (isset($_GET["search"])) {
-        $searchContent = "%" . trim($_GET["prompt"]) . "%";
+        $searchContent = "%" . htmlspecialchars(trim($_GET["prompt"])) . "%";
         $stmt = $conn->prepare("SELECT posts.*, users.username FROM posts JOIN users ON posts.author_id = users.id WHERE posts.title LIKE ? OR users.username LIKE ? ORDER BY posts.created_at DESC");
         $stmt->bind_param("ss", $searchContent, $searchContent);
         $stmt->execute();
@@ -43,8 +36,19 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
             <ul>
                 <li><a href="index.php" class="active">Home</a></li>
-                <li><a href="dashboard.php"><?php echo $_SESSION["username"]; ?></a></li>
-                <li><a href="logout.php" id="signoutBtn">Signout</a></li>
+                <?php 
+                if(isset($_SESSION["successful"]) && $_SESSION["successful"]){
+                    echo"
+                    <li><a href='dashboard.php'>{$_SESSION["username"]}</a></li>
+                    <li><a href='logout.php' id='signoutBtn'>Signout</a></li>";
+                }
+                else{
+                    echo"
+                    <li><a href='login.php'>Login</a></li>
+                    ";
+                }
+                ?>
+                
             </ul>
         </nav>
 

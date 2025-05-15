@@ -18,26 +18,21 @@ showpass.addEventListener("click", () => {
     passwordInput.type = "password";
 });
 
-//if php issues an error show it for 3 seconds
+//if php issues an error show it
 if(errorMessage.textContent != ""){
     errorMessage.style.display = "block";
 }
-setTimeout(()=>{
-    errorMessage.style.display = "none";
-}, 3000);
 
 //form validation: both fields must be there, passwords must be at least 10 characters and must contain at least one number
 regForm.addEventListener("submit", (event) => {
     if (usernameInput.value.trim() == "" || passwordInput.value.trim() == "") {
         errorMessage.style.display = "block";
         errorMessage.textContent = "Error: Empty field(s)!";
-        setTimeout(() => { errorMessage.style.display = "none"; }, 3000);
         event.preventDefault();
     }
     else if (passwordInput.value.trim().length < 10) {
         errorMessage.style.display = "block";
         errorMessage.textContent = "Error: Password must contain at least 10 characters!";
-        setTimeout(() => { errorMessage.style.display = "none"; }, 3000);
         event.preventDefault();
     }
     else {
@@ -52,7 +47,6 @@ regForm.addEventListener("submit", (event) => {
         if (!foundNums) {
             errorMessage.style.display = "block";
             errorMessage.textContent = "Error: Password must contain numbers!";
-            setTimeout(() => { errorMessage.style.display = "none"; }, 3000);
             event.preventDefault();
         }
     }

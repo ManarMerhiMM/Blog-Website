@@ -10,8 +10,8 @@ if (!(isset($_SESSION["successful"]) && $_SESSION["successful"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $title = trim($_POST["title"]);
-    $content = trim($_POST["content"]);
+    $title = htmlspecialchars(trim($_POST["title"]));
+    $content = htmlspecialchars(trim($_POST["content"]));
     $stmt = $conn->prepare("INSERT INTO posts (author_id, title, content) VALUES (?, ?, ?)");
     $stmt->bind_param("iss", $_SESSION["id"], $title, $content);
     $stmt->execute();
@@ -33,7 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <body>
     <form action="create_post.php" method="post" id="createForm">
-        <p id="errors">faqwfwafaf</p>
+        <h2 id="formTitle">Add Post</h2>
+        <p id="errors"></p>
         <input type="text" name="title" id="title" placeholder="Title...">
         <textarea name="content" id="content" placeholder="Body..."></textarea>
         <a href="dashboard.php"><button type="button">Back</button></a>

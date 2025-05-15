@@ -4,8 +4,8 @@ include "connect.php";
 if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
     try {
         if (isset($_POST["signup"])) { //the signup form is the one submitted
-            $username = trim($_POST["username"]);
-            $password = trim($_POST["password"]);
+            $username = htmlspecialchars(trim($_POST["username"]));
+            $password = htmlspecialchars(trim($_POST["password"]));
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password
 
@@ -56,6 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
         <div class="btnControls">
             <button type="submit" name="signup">Sign up</button>
             <button type="button"><a href="login.php">Login Instead</a></button>
+            <button type="button"><a href="index.php">Home</a></button>
         </div>
     </form>
 

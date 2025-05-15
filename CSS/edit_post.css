@@ -26,6 +26,10 @@ form {
     gap: 20px;
 }
 
+#formTitle{
+    text-align: center;
+}
+
 #errors {
     background-color: #fee2e2;
     display: none;
