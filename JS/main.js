@@ -22,3 +22,9 @@ if (document.getElementById("signoutBtn")) {
 document.querySelectorAll("article").forEach(article => article.addEventListener("click", (event) => {
     article.querySelector("form").submit();
 }));
+
+document.getElementById("postsPerPage").addEventListener("input", (event)=>{
+    if(event.target.value < 1){
+        event.target.value = "";
+    }
+})

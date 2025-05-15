@@ -84,6 +84,130 @@ nav ul li a.active {
 }
 
 
+#mainContainer {
+    width: 100%;
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#postContainer {
+    width: 100%;
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#paginationControls {
+    display: flex;
+    justify-content: center;
+    column-gap: 20px;
+    width: 50%;
+}
+
+#paginationControls a{
+    text-decoration: none;
+}
+
+.paginationBtns {
+    background-color: hsl(217, 91%, 50%);
+    color: white;
+    border: 2px solid #3b83f667;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.paginationBtns.activePage {
+    background-color: #664caf;
+    text-decoration: underline !important;
+    color: white;
+    font-weight: bold;
+    border: 2px solid #7e63ca;
+    pointer-events: none;
+}
+
+.paginationBtns:hover {
+    background-color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+.paginationBtns:active {
+    background-color: #2563eb;
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
+
+input[type="number"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    background-color: #f1f5f9;
+}
+
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#formHolder{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    row-gap: 10px;
+}
+
+
+#controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+#controls button {
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#controls button:hover {
+    background-color: #2563eb;
+}
+
+#emptySearch{
+    font-weight:500;
+}
+
 main {
     width: 100%;
     flex: 1;
@@ -178,7 +302,7 @@ article:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     width: 100%;
     max-width: 500px;
-    margin: 30px auto;
+    margin: auto;
 }
 
 #searchForm input[type="text"] {
