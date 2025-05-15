@@ -2,22 +2,43 @@
 session_start();
 include "connect.php";
 
-// Read and sanitize inputs 
+// --- 1) Read and sanitize inputs ---
 $postsPerPage = isset($_GET['postsPerPage']) ? max(1, (int)$_GET['postsPerPage']) : 5;
 $currentPage  = isset($_GET['page'])         ? max(1, (int)$_GET['page'])         : 1;
-$searchTerm   = '';
-$searchSql    = '';
-$params       = [];
-$paramTypes   = '';
 
-if (isset($_GET['search']) && isset($_GET['prompt'])) {
-    $searchTerm = '%' . trim(htmlspecialchars($_GET['prompt'])) . '%';
-    $searchSql  = "WHERE posts.title LIKE ? OR users.username LIKE ?";
-    $paramTypes = 'ss';
-    $params     = [$searchTerm, $searchTerm];
+// Prepare search filters
+$searchTerm = '';
+$category   = '';
+$params     = [];
+$paramTypes = '';
+$searchSqlParts = [];
+
+if (isset($_GET['search'])) {
+    // Text search
+    if (!empty($_GET['prompt'])) {
+        $searchTerm = '%' . trim(htmlspecialchars($_GET['prompt'])) . '%';
+        $searchSqlParts[] = "(posts.title LIKE ? OR users.username LIKE ? OR posts.content LIKE ? )";
+        $paramTypes .= 'sss';
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
+        $params[] = $searchTerm;
+    }
+    // Category filter
+    if (!empty($_GET['category'])) {
+        $category = trim(htmlspecialchars($_GET['category']));
+        $searchSqlParts[] = "posts.category = ?";
+        $paramTypes .= 's';
+        $params[] = $category;
+    }
 }
 
-// Count total posts 
+// Combine WHERE clause
+$searchSql = '';
+if (count($searchSqlParts) > 0) {
+    $searchSql = 'WHERE ' . implode(' AND ', $searchSqlParts);
+}
+
+// --- 2) Count total posts ---
 $countSql = "
     SELECT COUNT(*) AS total
     FROM posts
@@ -41,7 +62,7 @@ $countStmt->close();
 $totalPages = (int)ceil($totalPosts / $postsPerPage);
 $offset     = ($currentPage - 1) * $postsPerPage;
 
-// Fetch posts for current page 
+// --- 3) Fetch posts for current page ---
 $dataSql = "
     SELECT posts.*, users.username
     FROM posts
@@ -51,6 +72,8 @@ $dataSql = "
     LIMIT ? OFFSET ?
 ";
 $stmt = $conn->prepare($dataSql);
+
+// Bind parameters including pagination
 if ($searchSql) {
     $types      = $paramTypes . 'ii';
     $bindValues = array_merge($params, [$postsPerPage, $offset]);
@@ -66,6 +89,7 @@ if ($searchSql) {
 $stmt->execute();
 $result = $stmt->get_result();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -96,24 +120,35 @@ $result = $stmt->get_result();
 
     <main>
         <div id="formHolder">
+            <!-- Search & Filter Form -->
             <form method="get" id="searchForm">
-                <input name="prompt" type="text"
-                    placeholder="Search by post title/author..."
+                <input name="prompt" type="text" placeholder="Search..."
                     value="<?= htmlspecialchars($_GET['prompt'] ?? '') ?>">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <?php
+                    $catResult = $conn->query("SELECT name FROM categories ORDER BY name ASC");
+                    while ($cat = $catResult->fetch_assoc()) {
+                        $sel = (isset($_GET['category']) && $_GET['category'] === $cat['name']) ? 'selected' : '';
+                        echo '<option value="' . htmlspecialchars($cat['name']) . '" ' . $sel . '>'
+                            . htmlspecialchars($cat['name']) . '</option>';
+                    }
+                    ?>
+                </select>
                 <input type="hidden" name="search" value="1">
                 <input type="hidden" name="postsPerPage" value="<?= $postsPerPage ?>">
                 <input type="hidden" name="page" value="1">
                 <button type="submit">Search</button>
             </form>
 
+            <!-- Posts-per-Page Form -->
             <form method="get" id="controls">
-                <input name="postsPerPage" type="number" min="1"
-                    placeholder="Posts per page..."
-                    id="postsPerPage"
-                    value="<?= $postsPerPage ?>">
+                <input name="postsPerPage" type="number" min="1" placeholder="Posts per page..."
+                    id="postsPerPage" value="<?= $postsPerPage ?>">
                 <?php if (isset($_GET['search'])): ?>
                     <input type="hidden" name="search" value="1">
-                    <input type="hidden" name="prompt" value="<?= htmlspecialchars($_GET['prompt']) ?>">
+                    <input type="hidden" name="prompt" value="<?= htmlspecialchars($_GET['prompt'] ?? '') ?>">
+                    <input type="hidden" name="category" value="<?= htmlspecialchars($_GET['category'] ?? '') ?>">
                 <?php endif; ?>
                 <input type="hidden" name="page" value="1">
                 <button type="submit">Apply</button>
@@ -128,12 +163,11 @@ $result = $stmt->get_result();
                             <div class="subDiv1">
                                 <img src="imgs/userForPost.png" class="postImgs" alt="User">
                                 <span class="authors"><?= htmlspecialchars($row['username']) ?></span>
+                                <span class="categories"><?= $row["category"] ?></span>
                             </div>
                             <div class="subDiv2">
                                 <h2 class="titles"><?= htmlspecialchars($row['title']) ?></h2>
-                                <span class="dates">
-                                    <?= htmlspecialchars(date('j/n/Y', strtotime($row['created_at']))) ?>
-                                </span>
+                                <span class="dates"><?= htmlspecialchars(date('j/n/Y', strtotime($row['created_at']))) ?></span>
                             </div>
                             <p class="postBody"><?= nl2br(htmlspecialchars($row['content'])) ?></p>
                             <form action="view_post.php" method="get" style="display:none;">
@@ -149,11 +183,11 @@ $result = $stmt->get_result();
 
         <div id="paginationControls">
             <?php
-            // Build one base array for every link
             $baseQuery = [];
-            if (!empty($_GET['search']) && isset($_GET['prompt'])) {
-                $baseQuery['search']       = '1';
-                $baseQuery['prompt']       = htmlspecialchars($_GET['prompt']);
+            if (!empty($_GET['search'])) {
+                $baseQuery['search']      = '1';
+                if (isset($_GET['prompt']))   $baseQuery['prompt']   = htmlspecialchars($_GET['prompt']);
+                if (isset($_GET['category'])) $baseQuery['category'] = htmlspecialchars($_GET['category']);
             }
             $baseQuery['postsPerPage'] = $postsPerPage;
 
@@ -161,31 +195,24 @@ $result = $stmt->get_result();
             if ($currentPage > 1) {
                 $tmp = $baseQuery;
                 $tmp['page'] = $currentPage - 1;
-                echo '<a href="index.php?' . http_build_query($tmp) . '" class="paginationBtns">'
-                    . '&larr; Previous</a>';
+                echo '<a href="index.php?' . http_build_query($tmp) . '" class="paginationBtns">&larr; Previous</a>';
             }
-
-            // Pages 1..N
+            // Page links
             for ($p = 1; $p <= $totalPages; $p++) {
                 $tmp = $baseQuery;
                 $tmp['page'] = $p;
                 $active = $p === $currentPage ? ' activePage' : '';
-                echo '<a href="index.php?' . http_build_query($tmp)
-                    . '" class="paginationBtns' . $active . '">'
-                    . $p . '</a>';
+                echo '<a href="index.php?' . http_build_query($tmp) . '" class="paginationBtns' . $active . '">' . $p . '</a>';
             }
-
             // Next
             if ($currentPage < $totalPages) {
                 $tmp = $baseQuery;
                 $tmp['page'] = $currentPage + 1;
-                echo '<a href="index.php?' . http_build_query($tmp) . '" class="paginationBtns">'
-                    . 'Next &rarr;</a>';
+                echo '<a href="index.php?' . http_build_query($tmp) . '" class="paginationBtns">Next &rarr;</a>';
             }
             ?>
         </div>
     </main>
-
     <script src="JS/main.js"></script>
 </body>
 
