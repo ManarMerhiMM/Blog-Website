@@ -10,11 +10,13 @@ if (!(isset($_SESSION["successful"]) && $_SESSION["successful"])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $category = htmlspecialchars(trim($_POST["category"]));
     $title = htmlspecialchars(trim($_POST["title"]));
     $content = htmlspecialchars(trim($_POST["content"]));
-    $stmt = $conn->prepare("INSERT INTO posts (author_id, title, content) VALUES (?, ?, ?)");
-    $stmt->bind_param("iss", $_SESSION["id"], $title, $content);
+    $stmt = $conn->prepare("INSERT INTO posts (author_id, title, content, category) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("isss", $_SESSION["id"], $title, $content, $category);
     $stmt->execute();
+    header("Location: dashboard.php");
 }
 
 
@@ -37,6 +39,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <p id="errors"></p>
         <input type="text" name="title" id="title" placeholder="Title...">
         <textarea name="content" id="content" placeholder="Body..."></textarea>
+        <div id="categoryContainer">
+            <label for="postCategory">Category:</label>
+            <select id="postCategory" name="category">
+                <?php
+                $catResult = $conn->query("SELECT name FROM categories ORDER BY name ASC");
+                while ($cat = $catResult->fetch_assoc()) {
+                    echo "<option value='{$cat["name"]}'>{$cat["name"]}</option>";
+                }
+                ?>
+            </select>
+        </div>
         <a href="dashboard.php"><button type="button">Back</button></a>
         <button type="submit" name="create">Post</button>
     </form>

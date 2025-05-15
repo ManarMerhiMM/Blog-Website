@@ -61,6 +61,7 @@ $result = $stmt->get_result();
                     echo "<div class='subDiv1'>";
                     echo "<img class='postImgs' src='imgs/userForPost.png' alt='user image for post'>";
                     echo "<span class='authors'>" . $_SESSION["username"] . "</span>";
+                    echo "<span class='categories'>{$row["category"]}</span>";
                     echo "</div>";
                     echo "<div class='subDiv2'>";
                     echo "<h2 class='titles'>" . htmlspecialchars($row["title"]) . "</h2>";

@@ -77,9 +77,9 @@ button[type="button"]:hover {
 }
 
 #errors {
-    background-color: #fee2e2; 
+    background-color: #fee2e2;
     display: none;
-    color: #b91c1c; 
+    color: #b91c1c;
     padding: 0.75rem 1rem;
     border: 1px solid #fca5a5;
     border-radius: 0.5rem;
@@ -88,6 +88,42 @@ button[type="button"]:hover {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-#formTitle{
+#formTitle {
     text-align: center;
+}
+
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    background-color: #f1f5f9;
+    color: #111827;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+    cursor: pointer;
+
+    width: 80%;
+}
+
+
+select::-webkit-appearance {
+    appearance: none;
+}
+
+
+#categoryContainer{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+    row-gap: 10px;
+    flex-wrap: wrap;
 }

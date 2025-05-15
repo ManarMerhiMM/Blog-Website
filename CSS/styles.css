@@ -366,14 +366,9 @@ select {
     min-width: 120px;
 }
 
-
 select::-webkit-appearance {
     appearance: none;
 }
-
-
-
-
 
 
 @media (max-width: 1270px) {
