@@ -39,6 +39,9 @@ $result = $stmt->get_result();
             <ul>
                 <li><a href="index.php">Home</a></li>
                 <li><a href="dashboard.php" class="active"><?php echo $_SESSION["username"]; ?></a></li>
+                <?php if (isset($_SESSION["is_admin"]) && $_SESSION["is_admin"]) { ?>
+                    <li><a href="admin_dashboard.php">Admin Panel</a></li>
+                <?php } ?>
                 <li><a href="logout.php" id="signoutBtn">Signout</a></li>
             </ul>
         </nav>

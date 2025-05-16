@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
         $password = htmlspecialchars(trim($_POST["password"]));
 
         //execute query then redirect user to homepage, use statement preparation to protect from SQL injections
-        $stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
+        $stmt = $conn->prepare("SELECT id, password, deactivated, is_admin FROM users WHERE username = ?");
 
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -19,17 +19,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
             $user = $result->fetch_assoc();
             $hashedPassword = $user["password"];
             $id = $user["id"];
+            $deactivated = (int) $user['deactivated'];
+            $is_admin = (int) $user['is_admin'];
 
             // Verify password using password_verify()
             if (password_verify($password, $hashedPassword)) {
-                // Password is correct, start the session and set user data
-                $_SESSION["username"] = $username;
-                $_SESSION["id"] = $id;
-                $_SESSION["successful"] = true;
-                header("Location: index.php"); // Redirect to homepage
-                exit;
+                // Password is correct check for deactivation before routing
+                if ($deactivated) {
+                    $error = "Your account has been deactivated :/";
+                } else {
+                    $_SESSION["username"] = $username;
+                    $_SESSION["id"] = $id;
+                    $_SESSION["successful"] = true;
+                    $_SESSION["is_admin"] = $is_admin;
+                    header("Location: index.php"); // Redirect to homepage
+                    exit;
+                }
             } else {
-                $error = "Incorrect Cridentials"; //password was not verified
+                $error = "Incorrect Credentials"; //password was not verified
             }
         } else {
             $error = "Error: This account does not exist, consider signing up!"; //the username does not exist which is why the select statement returned 0 rows

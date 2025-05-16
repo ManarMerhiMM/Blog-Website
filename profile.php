@@ -50,6 +50,9 @@ $totalPostNum = $totalPostNum["count"];
                 <li><a href="index.php">Home</a></li>
                 <?php if (!empty($_SESSION['successful'])): ?>
                     <li><a href="dashboard.php"><?= htmlspecialchars($_SESSION['username']) ?></a></li>
+                    <?php if (isset($_SESSION["is_admin"]) && $_SESSION["is_admin"]) { ?>
+                        <li><a href="admin_dashboard.php">Admin Panel</a></li>
+                    <?php } ?>
                     <li><a href="logout.php">Signout</a></li>
                 <?php else: ?>
                     <li><a href="login.php">Login</a></li>
