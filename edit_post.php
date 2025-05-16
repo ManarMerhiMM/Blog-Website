@@ -43,6 +43,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $category     = htmlspecialchars(trim($_POST["category"]));
     $newImagePath = $currentImage;
 
+    if($title == "" || $content == ""){
+        $error = "Error: Empty field(s)!";
+    }
     // 1) Handle image removal
     if (!empty($_POST['remove_image']) && $currentImage) {
         $fullPath = __DIR__ . '/' . $currentImage;

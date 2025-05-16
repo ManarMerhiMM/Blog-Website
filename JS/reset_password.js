@@ -23,7 +23,7 @@ resetForm.addEventListener("submit", (event) => {
     else {
         let foundNums = false;
         for (let i = 0; i < pass1.value.trim().length; i++) {
-            if (pass1.value.trim()[i] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+            if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(pass1.value.trim()[i])) {
                 foundNums = true;
                 break;
             }

@@ -7,39 +7,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
         $username = htmlspecialchars(trim($_POST["username"]));
         $password = htmlspecialchars(trim($_POST["password"]));
 
-        //execute query then redirect user to homepage, use statement preparation to protect from SQL injections
-        $stmt = $conn->prepare("SELECT id, password, deactivated, is_admin FROM users WHERE username = ?");
+        if ($username == "" || $password == "") {
+            $error = "Error: Empty field(s)!";
+        } else {
+            //execute query then redirect user to homepage, use statement preparation to protect from SQL injections
+            $stmt = $conn->prepare("SELECT id, password, deactivated, is_admin FROM users WHERE username = ?");
 
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
-        // Check if user exists
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
-            $hashedPassword = $user["password"];
-            $id = $user["id"];
-            $deactivated = (int) $user['deactivated'];
-            $is_admin = (int) $user['is_admin'];
+            // Check if user exists
+            if ($result->num_rows > 0) {
+                $user = $result->fetch_assoc();
+                $hashedPassword = $user["password"];
+                $id = $user["id"];
+                $deactivated = (int) $user['deactivated'];
+                $is_admin = (int) $user['is_admin'];
 
-            // Verify password using password_verify()
-            if (password_verify($password, $hashedPassword)) {
-                // Password is correct check for deactivation before routing
-                if ($deactivated) {
-                    $error = "Your account has been deactivated :/";
+                // Verify password using password_verify()
+                if (password_verify($password, $hashedPassword)) {
+                    // Password is correct check for deactivation before routing
+                    if ($deactivated) {
+                        $error = "Your account has been deactivated :/";
+                    } else {
+                        $_SESSION["username"] = $username;
+                        $_SESSION["id"] = $id;
+                        $_SESSION["successful"] = true;
+                        $_SESSION["is_admin"] = $is_admin;
+                        header("Location: index.php"); // Redirect to homepage
+                        exit;
+                    }
                 } else {
-                    $_SESSION["username"] = $username;
-                    $_SESSION["id"] = $id;
-                    $_SESSION["successful"] = true;
-                    $_SESSION["is_admin"] = $is_admin;
-                    header("Location: index.php"); // Redirect to homepage
-                    exit;
+                    $error = "Incorrect Credentials"; //password was not verified
                 }
             } else {
-                $error = "Incorrect Credentials"; //password was not verified
+                $error = "Error: This account does not exist, consider signing up!"; //the username does not exist which is why the select statement returned 0 rows
             }
-        } else {
-            $error = "Error: This account does not exist, consider signing up!"; //the username does not exist which is why the select statement returned 0 rows
         }
     }
 }

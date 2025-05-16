@@ -37,23 +37,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $pass1 = trim($_POST['password']);
     $pass2 = trim($_POST['confirm_password']);
 
+    if ($pass1 == "" || $pass2 == "") {
+        $error = "Error: Empty field(s)!";
+    } else if ($pass1 != $pass2) {
+        $error = "Error: Passwords do not match!";
+    } else if (strlen($pass1) < 10) {
+        $error = "Error: New password must be at least 10 characters long!";
+    } else if (!preg_match('/\d/', $pass1)) {
+        $error = "Error: Password must contain numbers!";
+    } else {
+        // Update user password
+        $hash = password_hash($pass1, PASSWORD_DEFAULT);
+        $upd  = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
+        $upd->bind_param("si", $hash, $user_id);
+        $upd->execute();
+        $upd->close();
 
-    // Update user password
-    $hash = password_hash($pass1, PASSWORD_DEFAULT);
-    $upd  = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
-    $upd->bind_param("si", $hash, $user_id);
-    $upd->execute();
-    $upd->close();
+        // Delete reset token
+        $del = $conn->prepare("DELETE FROM password_resets WHERE token = ?");
+        $del->bind_param("s", $token);
+        $del->execute();
+        $del->close();
 
-    // Delete reset token
-    $del = $conn->prepare("DELETE FROM password_resets WHERE token = ?");
-    $del->bind_param("s", $token);
-    $del->execute();
-    $del->close();
-
-    // Redirect to login
-    header("Location: login.php");
-    exit;
+        // Redirect to login
+        header("Location: login.php");
+        exit;
+    }
 }
 ?>
 

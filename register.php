@@ -9,13 +9,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
             $email = htmlspecialchars(trim($_POST["email"]));
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password
 
-            //execute query then redirect user to login, use statement preparation to protect from SQL injections
-            $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
+            if ($username == "" || $email == "" || $password == "") {
+                $error = "Error: Empty field(s)!";
+            } else if (strlen($password) < 10) {
+                $error = "Error: Password must contain at least 10 characters!";
+            } else if (!preg_match('/\d/', $password)) {
+                $error = "Error: Password must contain numbers!";
+            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $error = "Error: Invalid email format!";
+            } else {
+                //execute query then redirect user to login, use statement preparation to protect from SQL injections
+                $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
 
-            $stmt->bind_param("sss", $username, $hashedPassword, $email);
-            if ($stmt->execute()) {
-                header("Location: login.php");
-                exit;
+                $stmt->bind_param("sss", $username, $hashedPassword, $email);
+                if ($stmt->execute()) {
+                    header("Location: login.php");
+                    exit;
+                }
             }
         }
     } catch (mysqli_sql_exception $e) { //Username already exists error

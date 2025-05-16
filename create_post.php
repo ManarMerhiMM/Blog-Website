@@ -17,6 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $content   = htmlspecialchars(trim($_POST["content"]));
     $imagePath = null;
 
+    if($title == "" || $content == ""){
+        $error = "Error: Empty field(s)!";
+    }
     // IMAGE UPLOAD BLOCK
     if (!empty($_FILES['image']['name'])) {
         if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {

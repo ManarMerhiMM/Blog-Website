@@ -20,7 +20,7 @@ showpass.addEventListener("click", () => {
 });
 
 //if php issues an error show it
-if(errorMessage.textContent != ""){
+if (errorMessage.textContent != "") {
     errorMessage.style.display = "block";
 }
 
@@ -39,7 +39,7 @@ regForm.addEventListener("submit", (event) => {
     else {
         let foundNums = false;
         for (let i = 0; i < passwordInput.value.trim().length; i++) {
-            if (passwordInput.value.trim()[i] in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+            if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(passwordInput.value.trim()[i])) {
                 foundNums = true;
                 break;
             }
