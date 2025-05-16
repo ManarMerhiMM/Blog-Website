@@ -98,9 +98,17 @@ article {
     color: #555;
 }
 
-.postMeta .author {
+.postMeta .authors {
     font-weight: bold;
     color: #4f46e5;
+}
+
+.authors{
+    text-decoration: none;
+}
+
+.authors:hover{
+    text-decoration: underline;
 }
 
 .postMeta .postCount {

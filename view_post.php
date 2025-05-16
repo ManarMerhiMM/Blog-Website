@@ -51,7 +51,7 @@ $postCount = $countRow['post_count'];
         <article>
             <h1 class="postTitle"><?= htmlspecialchars($post['title']) ?></h1>
             <div class="postMeta">
-                <span class="author">By <?= htmlspecialchars($post['username']) ?></span>
+                <a class="authors" href="profile.php?userID=<?php echo"{$post["author_id"]}";;?>">By <?= htmlspecialchars($post['username']) ?></a>
                 <span class="userSince" data-user-created="<?= $post['user_created'] ?>">
                     Joined: <?= date("j F, Y", strtotime($post['user_created'])) ?>
                 </span>

@@ -8,14 +8,34 @@
 body {
     background: linear-gradient(135deg, #4f46e5, #3b82f6);
     height: 100vh;
-    width: 100vw;
     display: flex;
-    overflow-x: hidden;
 }
 
 header {
     display: flex;
 }
+
+main {
+    width: 100%;
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#welcomeMessage {
+    color: white;
+    font-size: 2rem;
+}
+
+#activity {
+    color: white;
+    font-size: 2em;
+}
+
 
 nav#sidebar {
     background-color: white;
@@ -85,59 +105,18 @@ nav ul li a.active {
     cursor: pointer;
 }
 
-main {
-    padding: 40px 20px;
-    overflow-y: auto;
+#mainContainer {
+    width: 100%;
+    flex: 1;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    width: 100%;
-}
-
-.welcome-container {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-#welcomeMessage {
-    color: white;
-    font-size: 2rem;
-}
-
-.addPostBtn {
-    background-color: white;
-    color: #4f46e5;
-    padding: 10px 20px;
-    font-size: 1rem;
-    text-decoration: none;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-}
-
-.addPostBtn:hover {
-    background-color: #e0e7ff;
-}
-
-#mainContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-}
-
-#activity {
-    color: white;
-    font-size: 2em;
 }
 
 article {
+    cursor: pointer;
     background-color: white;
     padding: 25px 30px;
     border-radius: 16px;
@@ -148,19 +127,18 @@ article {
     flex-direction: column;
     gap: 20px;
     transition: transform 0.2s ease;
-    cursor: pointer;
 }
 
 article:hover {
     transform: translateY(-5px);
 }
 
+
+
 .mainDiv {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    width: 100%;
-    align-items: flex-start;
 }
 
 .subDiv1 {
@@ -168,7 +146,6 @@ article:hover {
     position: relative;
     align-items: center;
     gap: 12px;
-    width: 100%;
 }
 
 .postImgs {
@@ -189,64 +166,6 @@ article:hover {
 .authors:hover{
     text-decoration: underline;
 }
-
-.subDiv2 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    column-gap: 30px;
-    width: 100%;
-}
-
-.titles {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #111827;
-    margin: 0;
-}
-
-.dates {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-top: 5px;
-}
-
-.postBody {
-    line-height: 1.7;
-    color: #1f2937;
-    font-size: 1.05rem;
-    white-space: pre-line;
-    padding-top: 5px;
-}
-
-form {
-    display: flex;
-    justify-content: right;
-    gap: 20px;
-    margin-top: 15px;
-}
-
-form button {
-    background-color: #4f46e5;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-form button:hover {
-    background-color: #3b3ac1;
-}
-
-.noPosts {
-    color: white;
-    font-size: 1.2rem;
-}
-
 
 .categories {
     position: absolute;
@@ -282,6 +201,35 @@ form button:hover {
     background-color: #207c17;
 }
 
+.subDiv2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.titles {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.dates {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-top: 5px;
+}
+
+.postBody {
+    line-height: 1.7;
+    color: #1f2937;
+    font-size: 1.05rem;
+    white-space: pre-line;
+    padding-top: 5px;
+}
+
+
 @media (max-width: 1270px) {
     #burger {
         display: block;
@@ -293,15 +241,5 @@ form button:hover {
 
     nav#sidebar.show {
         transform: translateX(0);
-    }
-
-    main {
-        margin-left: 0;
-        padding: 20px;
-    }
-
-    .welcome-container,
-    #mainContainer {
-        align-items: center;
     }
 }

@@ -262,6 +262,11 @@ article:hover {
     font-weight: bold;
     color: #4f46e5;
     font-size: 1.1rem;
+    text-decoration: none;
+}
+
+.authors:hover{
+    text-decoration: underline;
 }
 
 .categories {

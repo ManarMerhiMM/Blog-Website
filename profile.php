@@ -1,25 +1,35 @@
 <?php
 session_start();
 include "connect.php";
-$_SESSION["prev_page"] = "dashboard.php";
 
-if (!(isset($_SESSION["successful"]) && $_SESSION["successful"])) {
-    header("Location: session.php");
+$id = isset($_GET["userID"]) ? $_GET["userID"] : '';
+
+if (empty($id)) {
+    header("Location: index.php");
     exit;
 }
 
-$userStmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
-$userStmt->bind_param("s", $_SESSION["username"]);
+$userStmt = $conn->prepare("SELECT username FROM users WHERE id = ?");
+$userStmt->bind_param("i", $id);
 $userStmt->execute();
 $userResult = $userStmt->get_result();
 $user = $userResult->fetch_assoc();
 
-$user_id = $user['id'];
 $stmt = $conn->prepare("SELECT * FROM posts WHERE author_id = ? ORDER BY created_at DESC");
-$stmt->bind_param("i", $user_id);
+$stmt->bind_param("i", $id);
 $stmt->execute();
 $result = $stmt->get_result();
+
+
+$totalPostNum = $conn->prepare("SELECT COUNT(*) AS count FROM posts WHERE author_id = ?");
+$totalPostNum->bind_param("i", $id);
+$totalPostNum->execute();
+$totalPostNum = $totalPostNum->get_result();
+$totalPostNum = $totalPostNum->fetch_assoc();
+
+$totalPostNum = $totalPostNum["count"];
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,9 +37,9 @@ $result = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo "{$_SESSION["username"]}"; ?>'s Profile</title>
+    <title><?php echo "{$user['username']}'s Profile"; ?></title>
     <link rel="icon" href="imgs/userIcon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="CSS/dashboard.css">
+    <link rel="stylesheet" href="CSS/profile.css">
 </head>
 
 <body>
@@ -38,8 +48,12 @@ $result = $stmt->get_result();
             <img id="logo" src="imgs/bloggerLogo.jpg" alt="Website Logo">
             <ul>
                 <li><a href="index.php">Home</a></li>
-                <li><a href="dashboard.php" class="active"><?php echo $_SESSION["username"]; ?></a></li>
-                <li><a href="logout.php" id="signoutBtn">Signout</a></li>
+                <?php if (!empty($_SESSION['successful'])): ?>
+                    <li><a href="dashboard.php"><?= htmlspecialchars($_SESSION['username']) ?></a></li>
+                    <li><a href="logout.php">Signout</a></li>
+                <?php else: ?>
+                    <li><a href="login.php">Login</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
         <button id="burger">&rarr;</button>
@@ -47,13 +61,11 @@ $result = $stmt->get_result();
 
     <main>
         <section class="welcome-container">
-            <h2 id="welcomeMessage"><?php echo "Welcome, {$_SESSION["username"]}!" ?></h2>
-
+            <h2 id="welcomeMessage"><?php echo "{$user["username"]}'s Profile!" ?></h2>
         </section>
 
         <section id="mainContainer">
-            <h2 id="activity">Your Activity</h2>
-            <a href="create_post.php" class="addPostBtn">Add Post</a>
+            <h2 id="activity"><?php echo"{$totalPostNum} Posts"; ?></h2>
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -61,7 +73,7 @@ $result = $stmt->get_result();
                     echo "<div class='mainDiv'>";
                     echo "<div class='subDiv1'>";
                     echo "<img class='postImgs' src='imgs/userForPost.png' alt='user image for post'>";
-                    echo '<a class="authors" href="profile.php?userID=' . $row["author_id"] . '">' . htmlspecialchars($_SESSION["username"]) . '</a>';
+                    echo '<a class="authors" href="profile.php?userID=' . $row["author_id"] . '">' . htmlspecialchars($user["username"]) . '</a>';
                     echo "<span class='categories {$row["category"]}'>{$row["category"]}</span>";
                     echo "</div>";
                     echo "<div class='subDiv2'>";
@@ -70,10 +82,8 @@ $result = $stmt->get_result();
                     echo "</div>";
                     echo "<p class='postBody'>" . nl2br(htmlspecialchars($row["content"])) . "</p>";
                     echo "</div>";
-                    echo "<form action='view_post.php' method='get'>";
+                    echo "<form action='view_post.php' method='get' style='display: hidden'>";
                     echo "<input type='hidden' name='postID' value='{$row['id']}'>";
-                    echo "<button class='editBtn' name='edit' type='button'>Edit</button>";
-                    echo "<button class='deleteBtn' name='delete' type='button'>Delete</button>";
                     echo "</form>";
                     echo "</article>";
                 }
@@ -84,7 +94,7 @@ $result = $stmt->get_result();
         </section>
     </main>
 
-    <script src="JS/dashboard.js"></script>
+    <script src="JS/profile.js"></script>
 </body>
 
 </html>

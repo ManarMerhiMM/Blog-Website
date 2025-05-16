@@ -109,7 +109,7 @@ $result = $stmt->get_result();
                 <li><a href="index.php" class="active">Home</a></li>
                 <?php if (!empty($_SESSION['successful'])): ?>
                     <li><a href="dashboard.php"><?= htmlspecialchars($_SESSION['username']) ?></a></li>
-                    <li><a href="logout.php">Signout</a></li>
+                    <li><a href="logout.php" id="signoutBtn">Signout</a></li>
                 <?php else: ?>
                     <li><a href="login.php">Login</a></li>
                 <?php endif; ?>
@@ -162,7 +162,7 @@ $result = $stmt->get_result();
                         <div class="mainDiv">
                             <div class="subDiv1">
                                 <img src="imgs/userForPost.png" class="postImgs" alt="User">
-                                <span class="authors"><?= htmlspecialchars($row['username']) ?></span>
+                                <a class="authors" href="profile.php?userID=<?php echo"{$row["author_id"]}";;?>"><?= htmlspecialchars($row['username']) ?></a>
                                 <span class="categories <?php echo "{$row["category"]}"; ?>"><?= $row["category"] ?></span>
                             </div>
                             <div class="subDiv2">
