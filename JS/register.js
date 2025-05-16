@@ -3,6 +3,7 @@ const showpass = document.getElementById("showpass");
 const regForm = document.getElementById("registerForm");
 const passwordInput = document.getElementById("password");
 const usernameInput = document.getElementById("username");
+const emailInput = document.getElementById("email");
 const errorMessage = document.getElementById("errors");
 
 //password hiding/showing using the eye picture
@@ -25,7 +26,7 @@ if(errorMessage.textContent != ""){
 
 //form validation: both fields must be there, passwords must be at least 10 characters and must contain at least one number
 regForm.addEventListener("submit", (event) => {
-    if (usernameInput.value.trim() == "" || passwordInput.value.trim() == "") {
+    if (usernameInput.value.trim() == "" || passwordInput.value.trim() == "" || emailInput.value.trim() == "") {
         errorMessage.style.display = "block";
         errorMessage.textContent = "Error: Empty field(s)!";
         event.preventDefault();

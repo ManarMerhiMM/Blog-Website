@@ -6,13 +6,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
         if (isset($_POST["signup"])) { //the signup form is the one submitted
             $username = htmlspecialchars(trim($_POST["username"]));
             $password = htmlspecialchars(trim($_POST["password"]));
-
+            $email = htmlspecialchars(trim($_POST["email"]));
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); //hash password
 
             //execute query then redirect user to login, use statement preparation to protect from SQL injections
-            $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+            $stmt = $conn->prepare("INSERT INTO users (username, password, email) VALUES (?, ?, ?)");
 
-            $stmt->bind_param("ss", $username, $hashedPassword);
+            $stmt->bind_param("sss", $username, $hashedPassword, $email);
             if ($stmt->execute()) {
                 header("Location: login.php");
                 exit;
@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
         }
     } catch (mysqli_sql_exception $e) { //Username already exists error
         if ($e->getCode() === 1062) {
-            $error = "Username already exists.";
+            $error = "Username/Email already exists.";
         }
     }
 }
@@ -46,6 +46,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
         <div class="formContainers">
             <label for="username">Username:</label>
             <input type="text" placeholder="Username..." name="username" id="username">
+        </div>
+        <div class="formContainers">
+            <label for="email">Email:</label>
+            <input type="email" placeholder="Email..." name="email" id="email">
         </div>
         <div class="formContainers">
             <label for="password">Password:</label>

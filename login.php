@@ -65,6 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
             <img id="hidepass" class="passControllers" src="imgs/hidepass.png" alt="password hidden">
             <img id="showpass" class="passControllers" src="imgs/showpass.png" alt="password shown">
         </div>
+        <div class="formContainers">
+            <a id="forgotPass" href="forgot_password.php">Forgot password? Click here</a>
+        </div>
         <div class="btnControls">
             <button type="submit" name="login">Login</button>
             <button type="button"><a href="register.php">Signup Instead</a></button>
