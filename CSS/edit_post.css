@@ -126,3 +126,7 @@ select::-webkit-appearance {
     row-gap: 10px;
     flex-wrap: wrap;
 }
+
+.currentImage{
+    max-width:200px;
+}

@@ -394,6 +394,10 @@ select::-webkit-appearance {
     appearance: none;
 }
 
+.images{
+    width: 50%;
+    margin: auto;
+}
 
 @media (max-width: 1270px) {
     #burger {
@@ -406,5 +410,35 @@ select::-webkit-appearance {
 
     nav#sidebar.show {
         transform: translateX(0);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #searchForm{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #searchForm Button{
+        width: 80%;
+    }
+
+    #controls{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #controls button{
+        width: 80%;
+    }
+
+    .categories{
+        font-size: 0.5em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .categories{
+        top: 100%;
     }
 }

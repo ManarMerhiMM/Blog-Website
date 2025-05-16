@@ -170,6 +170,9 @@ $result = $stmt->get_result();
                                 <span class="dates"><?= htmlspecialchars(date('j/n/Y', strtotime($row['created_at']))) ?></span>
                             </div>
                             <p class="postBody"><?= nl2br(htmlspecialchars($row['content'])) ?></p>
+                            <?php if(isset($row["image_path"])){ ?>
+                                <img class="images" src="<?php echo $row["image_path"];?>" alt="<?php echo"{$row["title"]} image"?>">
+                            <?php } ?>
                             <form action="view_post.php" method="get" style="display:none;">
                                 <input type="hidden" name="postID" value="<?= htmlspecialchars($row['id']) ?>">
                             </form>

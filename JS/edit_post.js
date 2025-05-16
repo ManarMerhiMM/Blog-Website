@@ -13,3 +13,7 @@ updateForm.addEventListener('submit', function(event) {
         event.preventDefault();
     }
 });
+
+if(errorMessage.textContent != ""){
+    errorMessage.style.display = "block";
+}

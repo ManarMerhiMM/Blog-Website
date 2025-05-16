@@ -48,7 +48,7 @@ textarea {
 }
 
 button {
-    padding: 12px;
+    padding: 12px 30px;
     font-size: 16px;
     font-weight: 600;
     border-radius: 12px;
@@ -126,4 +126,10 @@ select::-webkit-appearance {
     column-gap: 10px;
     row-gap: 10px;
     flex-wrap: wrap;
+}
+
+#actions{
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
 }

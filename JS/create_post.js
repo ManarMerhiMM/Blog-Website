@@ -13,3 +13,7 @@ createForm.addEventListener("submit", (event) => {
         event.preventDefault();
     }
 });
+
+if(errorMessage.textContent != ""){
+    errorMessage.style.display = "block";
+}

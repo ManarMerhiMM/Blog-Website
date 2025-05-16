@@ -61,11 +61,11 @@ $totalPostNum = $totalPostNum["count"];
 
     <main>
         <section class="welcome-container">
-            <h2 id="welcomeMessage"><?php echo "{$user["username"]}'s Profile!" ?></h2>
+            <h2 id="welcomeMessage"><?php echo "{$user["username"]}'s Profile" ?></h2>
         </section>
 
         <section id="mainContainer">
-            <h2 id="activity"><?php echo"{$totalPostNum} Posts"; ?></h2>
+            <h2 id="activity"><?php echo "{$totalPostNum} Posts"; ?></h2>
             <?php
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
@@ -81,6 +81,9 @@ $totalPostNum = $totalPostNum["count"];
                     echo "<span class='dates'>" . htmlspecialchars(date("j/n/Y", strtotime($row["created_at"]))) . "</span>";
                     echo "</div>";
                     echo "<p class='postBody'>" . nl2br(htmlspecialchars($row["content"])) . "</p>";
+                    if (isset($row["image_path"])) {
+                        echo '<img class="images" src="' . $row["image_path"] . '" alt="' . htmlspecialchars($row["title"]) . ' image">';
+                    }
                     echo "</div>";
                     echo "<form action='view_post.php' method='get' style='display: hidden'>";
                     echo "<input type='hidden' name='postID' value='{$row['id']}'>";

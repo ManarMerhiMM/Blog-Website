@@ -230,6 +230,11 @@ article:hover {
 }
 
 
+.images{
+    width: 50%;
+    margin: auto;
+}
+
 @media (max-width: 1270px) {
     #burger {
         display: block;

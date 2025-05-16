@@ -282,6 +282,11 @@ form button:hover {
     background-color: #207c17;
 }
 
+.images{
+    width: 50%;
+    margin: auto;
+}
+
 @media (max-width: 1270px) {
     #burger {
         display: block;

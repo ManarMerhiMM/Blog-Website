@@ -168,6 +168,11 @@ article {
     background-color: #207c17;
 }
 
+.images{
+    width: 50%;
+    margin: auto;
+}
+
 @media (max-width: 768px) {
     main {
         margin-left: 0;
@@ -176,5 +181,11 @@ article {
 
     article {
         padding: 20px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .categories{
+        top: 150%;
     }
 }

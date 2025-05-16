@@ -10,7 +10,7 @@ if (!$postID) {
 
 // Fetch post, author info, and author_id
 $stmt = $conn->prepare(
-    "SELECT p.id, p.category, p.title, p.content, p.created_at AS post_created, p.author_id,
+    "SELECT p.id, p.category, p.title, p.content, p.image_path, p.created_at AS post_created, p.author_id,
             u.username, u.created_at AS user_created
      FROM posts p
      JOIN users u ON p.author_id = u.id
@@ -51,7 +51,7 @@ $postCount = $countRow['post_count'];
         <article>
             <h1 class="postTitle"><?= htmlspecialchars($post['title']) ?></h1>
             <div class="postMeta">
-                <a class="authors" href="profile.php?userID=<?php echo"{$post["author_id"]}";;?>">By <?= htmlspecialchars($post['username']) ?></a>
+                <a class="authors" href="profile.php?userID=<?php echo "{$post["author_id"]}";; ?>">By <?= htmlspecialchars($post['username']) ?></a>
                 <span class="userSince" data-user-created="<?= $post['user_created'] ?>">
                     Joined: <?= date("j F, Y", strtotime($post['user_created'])) ?>
                 </span>
@@ -60,6 +60,9 @@ $postCount = $countRow['post_count'];
                 <span class="categories <?= $post["category"] ?>"><?= $post["category"] ?></span>
             </div>
             <div class="postContent"><?= nl2br(htmlspecialchars($post['content'])) ?></div>
+            <?php if (isset($post["image_path"])) { ?>
+                <img class="images" src="<?php echo $post["image_path"]; ?>" alt="<?php echo "{$post["title"]} image" ?>">
+            <?php } ?>
             <a href="index.php" class="backBtn">← Back to Home</a>
         </article>
     </main>

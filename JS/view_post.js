@@ -6,7 +6,7 @@ if (userSinceEl) {
     const diffDays = Math.floor((now - created) / (1000 * 60 * 60 * 24));
     let text;
     if (diffDays < 1) text = 'Joined today';
-    else if (diffDays === 1) text = 'Joined 1 day ago';
+    else if (diffDays === 1) text = 'Joined yesterday';
     else text = `Joined ${diffDays} days ago`;
     userSinceEl.textContent = text;
 }
