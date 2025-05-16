@@ -11,8 +11,8 @@ if (!(isset($_SESSION["successful"]) && $_SESSION["successful"])) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if(isset($_POST["deleteComment"])){
         $commentID = isset($_POST["commentID"])? $_POST["commentID"]: '';
-        $deleteStmt = $conn->prepare("DELETE FROM comments WHERE id = ?");
-        $deleteStmt->bind_param("i", $commentID);
+        $deleteStmt = $conn->prepare("DELETE FROM comments WHERE id = ? AND user_id = ?");
+        $deleteStmt->bind_param("ii", $commentID, $_SESSION["id"]);
         $deleteStmt->execute();
     }
 }
