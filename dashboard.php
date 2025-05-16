@@ -8,6 +8,15 @@ if (!(isset($_SESSION["successful"]) && $_SESSION["successful"])) {
     exit;
 }
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if(isset($_POST["deleteComment"])){
+        $commentID = isset($_POST["commentID"])? $_POST["commentID"]: '';
+        $deleteStmt = $conn->prepare("DELETE FROM comments WHERE id = ?");
+        $deleteStmt->bind_param("i", $commentID);
+        $deleteStmt->execute();
+    }
+}
+
 $userStmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
 $userStmt->bind_param("s", $_SESSION["username"]);
 $userStmt->execute();
@@ -75,6 +84,44 @@ $result = $stmt->get_result();
                     if (isset($row["image_path"])) {
                         echo '<img class="images" src="' . $row["image_path"] . '" alt="' . htmlspecialchars($row["title"]) . ' image">';
                     }
+                    echo '<div class="commentSection">';
+                    echo '<h2>Comments</h2>';
+
+                    $post_id = $row["id"];
+
+                    $commentsStmt = $conn->prepare("
+                        SELECT comments.*, comments.id AS comment_id, users.username 
+                        FROM comments 
+                        JOIN users ON users.id = comments.user_id 
+                        WHERE comments.post_id = ? 
+                        ORDER BY comments.created_at ASC
+                    ");
+                    $commentsStmt->bind_param("i", $post_id);
+                    $commentsStmt->execute();
+                    $commentsResult = $commentsStmt->get_result();
+
+                    if ($commentsResult->num_rows < 1) {
+                        echo "<h2>No Comments yet :/</h2>";
+                    } else {
+                        while ($comment = $commentsResult->fetch_assoc()) {
+                            echo '<div class="comment">';
+                            echo '<div class="commentDiv1">';
+                            echo '<a href="profile.php?userID=' . htmlspecialchars($comment["user_id"]) . '" class="authors">' . htmlspecialchars($comment["username"]) . '</a>';
+                            echo '<span class="dates">' . htmlspecialchars(date('j/n/Y', strtotime($comment['created_at']))) . '</span>';
+                            echo '</div>';
+                            echo '<p class="commentBody">' . nl2br(htmlspecialchars($comment["content"])) . '</p>';
+                            if (isset($_SESSION["successful"]) && $_SESSION["successful"] && $comment["user_id"] == $_SESSION["id"]) {
+                                echo '<form action="dashboard.php" method="post" class="deleteCommentForms">';
+                                echo '<input type="hidden" name="commentID" value="' . htmlspecialchars($comment['comment_id']) . '">';
+                                echo '<button type="submit" name="deleteComment">Delete</button>';
+                                echo '</form>';
+                            }
+                            echo '</div>';
+                        }
+                    }
+
+                    echo '</div>';
+
                     echo "</div>";
                     echo "<form action='view_post.php' method='get'>";
                     echo "<input type='hidden' name='postID' value='{$row['id']}'>";

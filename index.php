@@ -12,7 +12,14 @@ $category   = '';
 $params     = [];
 $paramTypes = '';
 $searchSqlParts = [];
-
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (isset($_POST["deleteComment"])) {
+        $commentID = isset($_POST["commentID"]) ? $_POST["commentID"] : '';
+        $deleteStmt = $conn->prepare("DELETE FROM comments WHERE id = ?");
+        $deleteStmt->bind_param("i", $commentID);
+        $deleteStmt->execute();
+    }
+}
 if (isset($_GET['search'])) {
     // Text search
     if (!empty($_GET['prompt'])) {
@@ -64,7 +71,7 @@ $offset     = ($currentPage - 1) * $postsPerPage;
 
 // --- 3) Fetch posts for current page ---
 $dataSql = "
-    SELECT posts.*, users.username
+    SELECT posts.*, posts.id AS post_id, users.username
     FROM posts
     JOIN users ON posts.author_id = users.id
     $searchSql
@@ -179,6 +186,46 @@ $result = $stmt->get_result();
                             <form action="view_post.php" method="get" style="display:none;">
                                 <input type="hidden" name="postID" value="<?= htmlspecialchars($row['id']) ?>">
                             </form>
+                            <div class="commentSection">
+                                <h2>Comments</h2>
+                                <?php
+                                $post_id = $row["post_id"];
+                                $commentsStmt = $conn->prepare("
+                                    SELECT comments.*, comments.id AS comment_id, users.username 
+                                    FROM comments 
+                                    JOIN users ON users.id = comments.user_id 
+                                    WHERE comments.post_id = ? 
+                                    ORDER BY comments.created_at ASC
+                                ");
+                                $commentsStmt->bind_param("i", $post_id);
+
+                                $commentsStmt->execute();
+                                $commentsResult = $commentsStmt->get_result();
+                                if ($commentsResult->num_rows < 1) {
+                                    echo "<h2>No Comments yet :/</h2>";
+                                } else {
+                                    while ($comment = $commentsResult->fetch_assoc()) { ?>
+                                        <div class="comment">
+                                            <div class="commentDiv1">
+                                                <a href="<?php echo "profile.php?userID={$comment["user_id"]}" ?>" class="authors"><?php echo $comment["username"] ?></a>
+                                                <span class="dates"><?= htmlspecialchars(date('j/n/Y', strtotime($comment['created_at']))) ?></span>
+                                            </div>
+                                            <p class="commentBody"><?php echo $comment["content"] ?></p>
+                                            <?php if (isset($_SESSION["successful"]) && $_SESSION["successful"] && $comment["user_id"] == $_SESSION["id"]) { ?>
+                                                <form action="index.php" method="post" class="deleteCommentForms">
+                                                    <input type="hidden" name="commentID" value="<?= htmlspecialchars($comment['comment_id']) ?>">
+                                                    <button type="submit" name="deleteComment">Delete</button>
+                                                </form>
+                                            <?php } ?>
+                                        </div>
+
+                                <?php
+                                    }
+                                }
+                                ?>
+
+
+                            </div>
                         </div>
                     </article>
                 <?php endwhile; ?>

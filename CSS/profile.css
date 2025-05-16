@@ -163,7 +163,7 @@ article:hover {
     text-decoration: none;
 }
 
-.authors:hover{
+.authors:hover {
     text-decoration: underline;
 }
 
@@ -189,15 +189,15 @@ article:hover {
     background-color: #164bf9;
 }
 
-.Gaming{
+.Gaming {
     background-color: #f9163c;
 }
 
-.Movies{
+.Movies {
     background-color: #f1941a;
 }
 
-.Sports{
+.Sports {
     background-color: #207c17;
 }
 
@@ -230,9 +230,55 @@ article:hover {
 }
 
 
-.images{
+.images {
     width: 50%;
     margin: auto;
+}
+
+.commentSection {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.comment {
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    background-color: #b1cdec;
+    width: 80%;
+    border-radius: 5px;
+}
+
+.commentDiv1 {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 20px;
+    width: 100%;
+}
+
+
+.deleteCommentForms {
+    display: flex;
+    justify-content: right;
+}
+
+.deleteCommentForms button {
+    background-color: #e22d2d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.deleteCommentForms button:hover {
+    background-color: hsl(0, 76%, 45%);
 }
 
 @media (max-width: 1270px) {

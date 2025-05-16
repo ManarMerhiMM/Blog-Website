@@ -49,4 +49,13 @@ document.addEventListener("DOMContentLoaded", () => {
             if (viewForm) viewForm.submit();
         });
     });
+
+    document.querySelectorAll(".deleteCommentForms button").forEach(button => {
+        button.addEventListener("click", (event) => {
+            event.stopPropagation(); // Stop the article click
+            if (!confirm("Are you sure you want to delete this comment?")) {
+                event.preventDefault(); // Cancel the delete
+            }
+        });
+    });
 });

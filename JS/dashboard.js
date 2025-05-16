@@ -18,7 +18,7 @@ document.getElementById("signoutBtn").addEventListener("click", (event) => {
 });
 
 document.querySelectorAll("article").forEach(article => article.addEventListener("click", (event) => {
-    if (event.target.tag !== "button" ) {
+    if (event.target.tag !== "button") {
         article.querySelector("form").submit();
     }
 }));
@@ -36,5 +36,14 @@ document.querySelectorAll(".deleteBtn").forEach(btn => {
         event.stopPropagation(); // Prevent triggering article click event
         const postID = this.closest("form").querySelector("input[name='postID']").value;
         window.location.href = `delete_post.php?delete=1&postID=${postID}`;
+    });
+});
+
+document.querySelectorAll(".deleteCommentForms button").forEach(button => {
+    button.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop the article click
+        if (!confirm("Are you sure you want to delete this comment?")) {
+            event.preventDefault(); // Cancel the delete
+        }
     });
 });

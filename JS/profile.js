@@ -21,5 +21,15 @@ if (document.getElementById("signoutBtn")) {
 }
 
 document.querySelectorAll("article").forEach(article => article.addEventListener("click", (event) => {
-    article.querySelector("form").submit();
+    article.querySelector("form[action='view_post.php']").submit();
 }));
+
+
+document.querySelectorAll(".deleteCommentForms button").forEach(button => {
+    button.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop the article click
+        if (!confirm("Are you sure you want to delete this comment?")) {
+            event.preventDefault(); // Cancel the delete
+        }
+    });
+});

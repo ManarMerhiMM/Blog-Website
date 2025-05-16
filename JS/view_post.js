@@ -10,3 +10,13 @@ if (userSinceEl) {
     else text = `Joined ${diffDays} days ago`;
     userSinceEl.textContent = text;
 }
+
+
+document.querySelectorAll(".deleteCommentForms button").forEach(button => {
+    button.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop the article click
+        if (!confirm("Are you sure you want to delete this comment?")) {
+            event.preventDefault(); // Cancel the delete
+        }
+    });
+});

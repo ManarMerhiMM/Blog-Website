@@ -103,11 +103,16 @@ article {
     color: #4f46e5;
 }
 
-.authors{
+.authors {
+    font-weight: bold;
+    color: #4f46e5;
+}
+
+.authors {
     text-decoration: none;
 }
 
-.authors:hover{
+.authors:hover {
     text-decoration: underline;
 }
 
@@ -156,21 +161,100 @@ article {
     background-color: #164bf9;
 }
 
-.Gaming{
+.Gaming {
     background-color: #f9163c;
 }
 
-.Movies{
+.Movies {
     background-color: #f1941a;
 }
 
-.Sports{
+.Sports {
     background-color: #207c17;
 }
 
-.images{
+.images {
     width: 50%;
     margin: auto;
+}
+
+.commentSection {
+    display: flex;
+    margin-bottom: 10px;
+    flex-direction: column;
+    row-gap: 10px;
+    overflow-y: auto;
+    max-height: 600px;
+}
+
+.comment {
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    background-color: #b1cdec;
+    width: 80%;
+    border-radius: 5px;
+}
+
+.commentDiv1 {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 20px;
+    width: 100%;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    background-color: #c0e1f0;
+}
+
+#commentForm {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 15px;
+    width: 90%;
+}
+
+#commentForm button {
+    padding: 10px 20px;
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+#commentForm button:hover {
+    background-color: #2563eb;
+}
+
+
+.deleteCommentForms {
+    display: flex;
+    justify-content: right;
+}
+
+.deleteCommentForms button {
+    background-color: #e22d2d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.deleteCommentForms button:hover {
+    background-color: hsl(0, 76%, 45%);
 }
 
 @media (max-width: 768px) {
@@ -185,7 +269,7 @@ article {
 }
 
 @media screen and (max-width: 600px) {
-    .categories{
+    .categories {
         top: 150%;
     }
 }
