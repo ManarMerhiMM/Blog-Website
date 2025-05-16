@@ -252,10 +252,29 @@ form button:hover {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #ffffff;
-    background-color: #164bf9;
     border-radius: 9999px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease;
+}
+
+.General {
+    background-color: #444444;
+}
+
+.Tech {
+    background-color: #164bf9;
+}
+
+.Gaming{
+    background-color: #f9163c;
+}
+
+.Movies{
+    background-color: #f1941a;
+}
+
+.Sports{
+    background-color: #207c17;
 }
 
 @media (max-width: 1270px) {

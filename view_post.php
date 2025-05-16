@@ -57,7 +57,7 @@ $postCount = $countRow['post_count'];
                 </span>
                 <span class="postCount"><?= $postCount ?> posts</span>
                 <span class="postDate">Published: <?= date("j F, Y", strtotime($post['post_created'])) ?></span>
-                <span class="categories"><?= $post["category"] ?></span>
+                <span class="categories <?= $post["category"] ?>"><?= $post["category"] ?></span>
             </div>
             <div class="postContent"><?= nl2br(htmlspecialchars($post['content'])) ?></div>
             <a href="index.php" class="backBtn">← Back to Home</a>

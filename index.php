@@ -163,7 +163,7 @@ $result = $stmt->get_result();
                             <div class="subDiv1">
                                 <img src="imgs/userForPost.png" class="postImgs" alt="User">
                                 <span class="authors"><?= htmlspecialchars($row['username']) ?></span>
-                                <span class="categories"><?= $row["category"] ?></span>
+                                <span class="categories <?php echo "{$row["category"]}"; ?>"><?= $row["category"] ?></span>
                             </div>
                             <div class="subDiv2">
                                 <h2 class="titles"><?= htmlspecialchars($row['title']) ?></h2>
