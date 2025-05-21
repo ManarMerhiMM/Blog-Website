@@ -9,6 +9,12 @@ if (!$postID) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!isset($_SESSION["successful"]) || !$_SESSION["successful"]) {
+        // User is not logged in; block comment submission and redirect to login page
+        header("Location: login.php");
+        exit;
+    }
+
     if (isset($_POST["comment"])) {
         $content = $_POST["content"];
         $commentStmt = $conn->prepare("INSERT INTO comments (user_id, post_id, content) VALUES (?, ?, ?)");
@@ -86,7 +92,7 @@ $postCount = $countRow['post_count'];
                                     FROM comments 
                                     JOIN users ON users.id = comments.user_id 
                                     WHERE comments.post_id = ? 
-                                    ORDER BY comments.created_at ASC
+                                    ORDER BY comments.created_at DESC
                                 ");
                 $commentsStmt->bind_param("i", $post_id);
 
@@ -129,7 +135,8 @@ $postCount = $countRow['post_count'];
                     }
                 }
                 ?>
-                <a href="index.php" class="backBtn">← Back to Home</a>
+            </div>
+            <a href="index.php" class="backBtn">← Back to Home</a>
         </article>
     </main>
     <script src="JS/view_post.js"></script>

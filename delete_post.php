@@ -24,13 +24,30 @@ $authStmt->execute();
 $authResult = $authStmt->get_result();
 
 $authResult = $authResult->fetch_assoc();
-if($authResult["author_id"] != $_SESSION["id"]){
+if ($authResult["author_id"] != $_SESSION["id"]) {
     header("Location: dashboard.php");
     exit;
 }
 //Handle the deletion on POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['confirm_delete'])) {
+
+        //check if there was an image
+        $imgStmt = $conn->prepare("SELECT image_path FROM posts WHERE id = ? AND author_id = ?");
+        $imgStmt->bind_param("ii", $postID, $user_id);
+        $imgStmt->execute();
+        $imgResult = $imgStmt->get_result();
+        $imgRow = $imgResult->fetch_assoc();
+        $imgStmt->close();
+        //delete in case there was
+        $imgPath = $imgRow['image_path'];
+        if (!empty($imgRow['image_path'])) {
+            $imageFullPath = __DIR__ . '/' . $imgPath;
+            if (file_exists($imageFullPath)) {
+                @unlink($imageFullPath);
+            }
+        }
+        //delete the post
         $del = $conn->prepare("DELETE FROM posts WHERE id = ? AND author_id = ?");
         $del->bind_param("ii", $postID, $user_id);
         $del->execute();

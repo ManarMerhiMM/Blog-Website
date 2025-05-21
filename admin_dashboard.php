@@ -170,7 +170,7 @@ $postsStmt->close();
                                     FROM comments 
                                     JOIN users ON users.id = comments.user_id 
                                     WHERE comments.post_id = ? 
-                                    ORDER BY comments.created_at ASC
+                                    ORDER BY comments.created_at DESC
                                 ");
                             $commentsStmt->bind_param("i", $post_id);
 

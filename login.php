@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") { //form submission check
                         $_SESSION["id"] = $id;
                         $_SESSION["successful"] = true;
                         $_SESSION["is_admin"] = $is_admin;
-                        header("Location: index.php"); // Redirect to homepage
+                        header("Location: dashboard.php"); // Redirect to dashboard
                         exit;
                     }
                 } else {
